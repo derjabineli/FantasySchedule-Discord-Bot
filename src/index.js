@@ -1,5 +1,6 @@
 import { Client, IntentsBitField } from "discord.js";
 import "dotenv/config";
+import getTodaysGames from "../api/getGameSchedule.js";
 
 const client = new Client({
   intents: [
@@ -12,14 +13,24 @@ const client = new Client({
 
 client.login(process.env.TOKEN);
 
+async function playingTeams() {
+  const games = await getTodaysGames();
+  let message = "";
+  games.forEach((game) => (message += `${game.name} \n`));
+  // console.log(message);
+  return message;
+}
+
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}`);
 });
 
 client.on("messageCreate", (msg) => {
-  console.log(msg);
-
-  if (msg.content === "ping") {
-    msg.reply("pong");
+  if (msg.content === "/games") {
+    async function send() {
+      const message = await playingTeams();
+      msg.reply("## Today's Games :basketball:\n" + message);
+    }
+    send();
   }
 });
