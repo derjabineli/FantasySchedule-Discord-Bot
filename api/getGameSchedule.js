@@ -17,11 +17,6 @@ export default async function getTodaysGames() {
     const response = await axios.request(config);
     const data = await response.data.sports[0].leagues[0].events;
     const games = JSON.parse(JSON.stringify(data));
-    // console.log(JSON.parse(JSON.stringify(data)));
-
-    // const games = data.map((game) => game.label);
-
-    // console.log(games);
     return games;
   } catch (error) {
     console.error(error);
